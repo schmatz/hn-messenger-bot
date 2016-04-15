@@ -39,12 +39,12 @@ func (m *Bot) HandleWebhookPost(w http.ResponseWriter, r *http.Request) {
 	for _, entry := range webhookData.Entries {
 		for _, messaging := range entry.Messagings {
 			if messaging.Message != nil {
-				go func() {
-					err := m.messagingHandler(messaging)
+				go func(msg Messaging) {
+					err := m.messagingHandler(msg)
 					if err != nil {
 						log.Println("Error executing messaging handler:", err)
 					}
-				}()
+				}(messaging)
 			}
 		}
 	}
