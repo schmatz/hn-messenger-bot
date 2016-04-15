@@ -63,11 +63,14 @@ func (m *Bot) SendGenericTemplateReply(recipientID int64, elements []GenericTemp
 
 	marshalled, err := json.Marshal(r)
 	if err != nil {
-		log.Println("Error marshalling send request:", err)
 		return
 	}
 
-	req, _ := http.NewRequest("POST", "https://graph.facebook.com/v2.6/me/messages", bytes.NewBuffer(marshalled))
+	req, err := http.NewRequest("POST", "https://graph.facebook.com/v2.6/me/messages", bytes.NewBuffer(marshalled))
+	if err != nil {
+		return
+	}
+
 	req.Header.Set("Content-Type", "application/json")
 
 	q := req.URL.Query()
@@ -76,7 +79,6 @@ func (m *Bot) SendGenericTemplateReply(recipientID int64, elements []GenericTemp
 
 	resp, err := m.httpClient.Do(req)
 	if err != nil {
-		log.Println("Error sending message request:", err)
 		return
 	}
 	defer resp.Body.Close()
