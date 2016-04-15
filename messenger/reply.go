@@ -20,3 +20,10 @@ type GenericTemplateElement struct {
 	Subtitle string `json:"subtitle"`
 	ItemURL  string `json:"item_url"`
 }
+
+// SendError represents an error returned by the Send API
+type SendError struct {
+	Error struct {
+		Message string `json:"message"`
+	} `json:"error"`
+}

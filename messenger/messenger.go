@@ -3,6 +3,7 @@ package messenger
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -83,9 +84,16 @@ func (m *Bot) SendGenericTemplateReply(recipientID int64, elements []GenericTemp
 	if resp.StatusCode == 200 {
 		return
 	}
-	log.Println("Didn't get 200 for message request, got", resp.StatusCode)
 
-	return
+	var sendError SendError
+
+	decoder := json.NewDecoder(resp.Body)
+	err = decoder.Decode(&sendError)
+	if err != nil {
+		return
+	}
+
+	return fmt.Errorf("Error sending response: %s", sendError.Error)
 }
 
 // HandleVerificationChallenge allows Facebook to verify this bot.
