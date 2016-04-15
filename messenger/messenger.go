@@ -93,7 +93,7 @@ func (m *Bot) SendGenericTemplateReply(recipientID int64, elements []GenericTemp
 		return
 	}
 
-	return fmt.Errorf("Error sending response: %s", sendError.Error)
+	return fmt.Errorf("Error sending response: %s", sendError.Error.Message)
 }
 
 // HandleVerificationChallenge allows Facebook to verify this bot.
